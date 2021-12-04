@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @create: 2021-12-03 11:20
  **/
 @Configuration
-@MapperScan({"com.labi.securityjwt.mapper"})
+@MapperScan("com.labi.securityjwt.mapper")
 public class MyBatisConfig {
 }

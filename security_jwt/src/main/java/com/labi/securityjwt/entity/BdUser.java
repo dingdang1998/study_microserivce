@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -36,13 +36,13 @@ public class BdUser implements Serializable {
 
     @ApiModelProperty("创建时间")
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("修改时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     @ApiModelProperty("最后登录时间")
-    private LocalDateTime lastLoginTime;
+    private Date lastLoginTime;
 
     @ApiModelProperty("0:禁用 1:启用")
     private Byte status;

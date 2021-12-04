@@ -11,4 +11,5 @@
     <modules>
         <module>security_jwt</module>
     </modules>
+    <packaging>pom</packaging>
 </project>

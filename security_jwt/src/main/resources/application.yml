@@ -45,10 +45,10 @@ spring:
 #    timeout: 3000ms # 连接超时时间（毫秒）
 
 #扫描xml文件的位置
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath*:com/**/mapper/*.xml
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # 自定义redis key
 redis:
