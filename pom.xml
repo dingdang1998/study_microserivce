@@ -10,6 +10,7 @@
 
     <modules>
         <module>security_jwt</module>
+        <module>security-oauth2</module>
     </modules>
     <packaging>pom</packaging>
 </project>
