@@ -4,6 +4,7 @@ package com.labi.securityjwt.controller;
 import com.labi.securityjwt.common.api.CommonResult;
 import com.labi.securityjwt.entity.BdUser;
 import com.labi.securityjwt.service.IBdUserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/bd-user")
+@Api(value = "用户前端控制器")
 public class BdUserController {
 
     @Autowired
