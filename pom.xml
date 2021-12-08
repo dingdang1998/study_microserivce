@@ -11,6 +11,7 @@
     <modules>
         <module>security_jwt</module>
         <module>security-oauth2</module>
+        <module>oauth2-jwt</module>
     </modules>
     <packaging>pom</packaging>
 </project>
