@@ -12,6 +12,9 @@
         <module>security_jwt</module>
         <module>security-oauth2</module>
         <module>oauth2-jwt</module>
+        <module>nacos-user-service</module>
+        <module>nacos-ribbon-service</module>
+        <module>nacos-config-client</module>
     </modules>
     <packaging>pom</packaging>
 </project>
