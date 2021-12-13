@@ -3,6 +3,8 @@ package com.macro.cloud.controller;
 import com.macro.cloud.api.CommonResult;
 import com.macro.cloud.dto.Oauth2TokenDto;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 import java.util.Map;
@@ -34,8 +37,16 @@ public class AuthController {
      * Oauth2登录认证
      */
     @ApiOperation(value = "Oauth2登录认证")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "grant_type", value = "授权模式", required = true),
+            @ApiImplicitParam(name = "client_id", value = "Oauth2客户端ID", required = true),
+            @ApiImplicitParam(name = "client_secret", value = "Oauth2客户端秘钥", required = true),
+            @ApiImplicitParam(name = "refresh_token", value = "刷新token"),
+            @ApiImplicitParam(name = "username", value = "登录用户名"),
+            @ApiImplicitParam(name = "password", value = "登录密码")
+    })
     @RequestMapping(value = "/token", method = RequestMethod.POST)
-    public CommonResult<Oauth2TokenDto> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+    public CommonResult<Oauth2TokenDto> postAccessToken(@ApiIgnore Principal principal, @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
         OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         Oauth2TokenDto oauth2TokenDto = Oauth2TokenDto.builder()
                 .token(oAuth2AccessToken.getValue())
