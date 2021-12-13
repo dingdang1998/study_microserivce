@@ -6,9 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class NacosUserServiceApplication {
+public class Oauth2GatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NacosUserServiceApplication.class, args);
+        SpringApplication.run(Oauth2GatewayApplication.class, args);
     }
+
 }

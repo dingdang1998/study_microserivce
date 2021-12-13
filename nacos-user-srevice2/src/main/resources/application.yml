@@ -1,6 +1,6 @@
 spring:
   application:
-    name: nacos-user-service
+    name: nacos-user-service2
   cloud:
     nacos:
       discovery:
@@ -11,4 +11,4 @@ management:
       exposure:
         include: '*'
 server:
-  port: 8083
+  port: 8084
