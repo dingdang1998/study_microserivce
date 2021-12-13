@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.server.WebFilter;
 import reactor.core.publisher.Mono;
 
 /**
@@ -37,6 +38,7 @@ public class ResourceServerConfig {
     private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter;
+    private final WebFilter corsFilter;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -44,6 +46,7 @@ public class ResourceServerConfig {
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
         //自定义处理JWT请求头过期或签名错误的结果
         http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
+        http.addFilterBefore(corsFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         //对白名单路径，直接移除JWT请求头
         http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         http.authorizeExchange()

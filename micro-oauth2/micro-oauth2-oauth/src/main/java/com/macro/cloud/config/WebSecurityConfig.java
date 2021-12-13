@@ -22,11 +22,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers("/rsa/publicKey").permitAll()
-                .antMatchers("/v2/api-docs").permitAll()
-                .anyRequest().authenticated();
+//                .antMatchers("/rsa/publicKey").permitAll()
+//                .antMatchers("/v2/api-docs").permitAll()
+//                .antMatchers("/login").permitAll()
+                .anyRequest().permitAll();
     }
 
     @Bean

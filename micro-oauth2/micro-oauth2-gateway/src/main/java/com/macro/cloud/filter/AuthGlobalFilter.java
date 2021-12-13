@@ -26,9 +26,12 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-        if (StrUtil.isEmpty(token)) {
+
+        //如果请求头中token为空或token以Basic开头，不进行过滤直接通过
+        if (StrUtil.isEmpty(token) || token.startsWith("Basic")) {
             return chain.filter(exchange);
         }
+
         try {
             //从token中解析用户信息并设置到Header中去
             String realToken = token.replace("Bearer ", "");

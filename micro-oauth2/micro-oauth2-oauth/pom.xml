@@ -39,9 +39,8 @@
             <artifactId>knife4j-micro-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.macro.cloud</groupId>
-            <artifactId>micro-oauth2-common</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
     </dependencies>
 </project>

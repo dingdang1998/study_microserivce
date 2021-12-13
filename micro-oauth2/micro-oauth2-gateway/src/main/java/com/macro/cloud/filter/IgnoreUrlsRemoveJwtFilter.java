@@ -1,5 +1,6 @@
 package com.macro.cloud.filter;
 
+import cn.hutool.core.util.StrUtil;
 import com.macro.cloud.config.IgnoreUrlsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -31,6 +32,14 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
         ServerHttpRequest request = serverWebExchange.getRequest();
         URI uri = request.getURI();
         PathMatcher pathMatcher = new AntPathMatcher();
+
+        //swagger认证配置
+        //特别注意knife4j的Authorize是将client_id,client_secret放到Authorization中，此时不能去掉jwt
+        String tokenUrl = "/auth/oauth/token";
+        if (StrUtil.equals(serverWebExchange.getRequest().getPath().toString(), tokenUrl)) {
+            return webFilterChain.filter(serverWebExchange);
+        }
+
         //白名单路径移除JWT请求头
         List<String> ignoreUrls = ignoreUrlsConfig.getUrls();
         for (String ignoreUrl : ignoreUrls) {

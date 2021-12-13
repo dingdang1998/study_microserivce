@@ -1,8 +1,21 @@
 package com.macro.cloud.config;
 
-import com.macro.cloud.doadmin.SwaggerProperties;
+import cn.hutool.core.collection.CollectionUtil;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.*;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: study_microservice
@@ -11,18 +24,42 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @create: 2021-12-10 13:14
  **/
 @Configuration
-@EnableSwagger2
-public class Swagger2Config extends BaseSwaggerConfig {
+@EnableSwagger2WebMvc
+@EnableKnife4j
+public class Swagger2Config {
 
-    @Override
-    public SwaggerProperties swaggerProperties() {
-        return SwaggerProperties.builder()
-                .apiBasePackage("com.macro.cloud.controller")
-                .title("macro认证")
-                .description("认证中心相关接口文档")
-                .contactName("macro")
+    @Bean
+    public Docket createRestApi() {
+        List<GrantType> grantTypes = new ArrayList<>();
+        String passwordTokenUrl = "http://localhost:9201/auth/oauth/token";
+        ResourceOwnerPasswordCredentialsGrant resourceOwnerPasswordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant(passwordTokenUrl);
+        grantTypes.add(resourceOwnerPasswordCredentialsGrant);
+
+        OAuth oAuth = new OAuthBuilder().name("oauth2").grantTypes(grantTypes).build();
+
+        List<AuthorizationScope> scopes = new ArrayList<>();
+        scopes.add(new AuthorizationScope("read", "read  resources"));
+        scopes.add(new AuthorizationScope("write", "write resources"));
+        scopes.add(new AuthorizationScope("reads", "read all resources"));
+        scopes.add(new AuthorizationScope("writes", "write all resources"));
+        SecurityReference securityReference = new SecurityReference("oauth2", scopes.toArray(new AuthorizationScope[]{}));
+        SecurityContext securityContext = new SecurityContext(CollectionUtil.newArrayList(securityReference), PathSelectors.ant("/api/**"));
+        List<SecurityScheme> securitySchemes = CollectionUtil.newArrayList(oAuth);
+        //securyContext
+        List<SecurityContext> securityContexts = CollectionUtil.newArrayList(securityContext);
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.macro.cloud.controller"))
+                .paths(PathSelectors.any())
+                .build().securityContexts(securityContexts).securitySchemes(securitySchemes);
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("auth")
+                .description("授权服务API文档")
                 .version("1.0")
-                .enableSecurity(true)
                 .build();
     }
 }
