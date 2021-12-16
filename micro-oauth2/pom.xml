@@ -12,6 +12,7 @@
         <module>micro-oauth2-oauth</module>
         <module>micro-oauth2-gateway</module>
         <module>micro-oauth2-api</module>
+        <module>micro-oauth2-shardingdao</module>
     </modules>
 
     <packaging>pom</packaging>

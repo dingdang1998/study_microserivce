@@ -18,8 +18,6 @@
         <module>api-gateway</module>
         <module>nacos-user-srevice2</module>
         <module>micro-oauth2</module>
-        <module>micro-oauth2/untitled</module>
-        <module>micro-oauth2-common</module>
     </modules>
     <packaging>pom</packaging>
 </project>
