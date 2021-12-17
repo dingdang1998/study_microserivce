@@ -1,4 +1,4 @@
-package com.macro.cloud.api;
+package com.macro.cloud.result;
 
 /**
  * @program: study_microservice

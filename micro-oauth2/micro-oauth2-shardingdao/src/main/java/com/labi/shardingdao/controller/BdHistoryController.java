@@ -1,14 +1,16 @@
 package com.labi.shardingdao.controller;
 
 
-import com.labi.shardingdao.entity.BdHistory;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.labi.shardingdao.service.IBdHistoryService;
+import com.macro.cloud.entity.business.BdHistory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,6 +32,15 @@ public class BdHistoryController {
     public void addHistory(@RequestBody BdHistory history) {
         historyService.addHistory(history);
         log.info("添加成功：{}", history.toString());
+    }
+
+    @GetMapping("/list")
+    public List<BdHistory> getList() {
+        LambdaQueryWrapper<BdHistory> queryWrapper = new LambdaQueryWrapper<>();
+        DateTime date = DateUtil.date();
+        queryWrapper.le(BdHistory::getHistoryDate, date);
+        queryWrapper.ge(BdHistory::getHistoryDate, DateUtil.offsetDay(date, -7));
+        return historyService.list(queryWrapper);
     }
 }
 

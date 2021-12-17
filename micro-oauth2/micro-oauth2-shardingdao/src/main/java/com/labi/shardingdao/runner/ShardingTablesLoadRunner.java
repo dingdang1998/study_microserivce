@@ -1,6 +1,7 @@
 package com.labi.shardingdao.runner;
 
-import com.labi.shardingdao.config.sharding.HistoryPreciseAlgorithm;
+import com.labi.shardingdao.config.sharding.algorithm.HistoryPreciseAlgorithm;
+import com.labi.shardingdao.config.sharding.algorithm.HistoryRangeAlgorithm;
 import com.labi.shardingdao.mapper.ShardingMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,9 @@ public class ShardingTablesLoadRunner implements CommandLineRunner {
     public void run(String... args) {
         HistoryPreciseAlgorithm.setRedisTemplate(redisTemplate);
         HistoryPreciseAlgorithm.setShardingMapper(shardingMapper);
+        log.info("======>HistoryPreciseAlgorithm属性注入成功");
+
+        HistoryRangeAlgorithm.setRedisTemplate(redisTemplate);
+        log.info("======>HistoryRangeAlgorithm属性注入成功");
     }
 }

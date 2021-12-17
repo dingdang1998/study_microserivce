@@ -1,8 +1,8 @@
 package com.labi.shardingdao;
 
 import cn.hutool.core.date.DateUtil;
-import com.labi.shardingdao.entity.BdHistory;
 import com.labi.shardingdao.service.IBdHistoryService;
+import com.macro.cloud.entity.business.BdHistory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

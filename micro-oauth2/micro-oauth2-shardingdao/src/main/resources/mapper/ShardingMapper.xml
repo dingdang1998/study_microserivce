@@ -3,10 +3,10 @@
 <mapper namespace="com.labi.shardingdao.mapper.ShardingMapper">
 
     <update id="createHistoryTable">
-        CREATE TABLE ${tableName} (
+        CREATE TABLE IF NOT EXISTS ${tableName} (
           `id` bigint(11) NOT NULL AUTO_INCREMENT,
           `history_date` datetime DEFAULT NULL COMMENT '历史时间',
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
     </update>
 </mapper>

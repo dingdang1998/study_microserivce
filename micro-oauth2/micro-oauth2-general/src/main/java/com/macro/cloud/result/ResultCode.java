@@ -1,4 +1,4 @@
-package com.macro.cloud.api;
+package com.macro.cloud.result;
 
 /**
  * @program: study_microservice
@@ -20,10 +20,12 @@ public enum ResultCode implements IErrorCode {
         this.message = message;
     }
 
+    @Override
     public long getCode() {
         return code;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }

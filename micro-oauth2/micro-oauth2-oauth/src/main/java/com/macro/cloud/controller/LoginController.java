@@ -1,9 +1,9 @@
 package com.macro.cloud.controller;
 
-import com.macro.cloud.api.CommonResult;
 import com.macro.cloud.dto.CustomAccessToken;
 import com.macro.cloud.dto.Oauth2TokenDto;
 import com.macro.cloud.dto.ReqTokenDto;
+import com.macro.cloud.result.CommonResult;
 import com.macro.cloud.service.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,9 +1,9 @@
 package com.labi.shardingdao.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.labi.shardingdao.entity.BdHistory;
 import com.labi.shardingdao.mapper.BdHistoryMapper;
 import com.labi.shardingdao.service.IBdHistoryService;
+import com.macro.cloud.entity.business.BdHistory;
 import org.springframework.stereotype.Service;
 
 /**

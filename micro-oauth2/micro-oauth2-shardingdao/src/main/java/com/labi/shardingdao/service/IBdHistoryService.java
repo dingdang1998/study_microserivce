@@ -1,7 +1,7 @@
 package com.labi.shardingdao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.labi.shardingdao.entity.BdHistory;
+import com.macro.cloud.entity.business.BdHistory;
 
 /**
  * <p>

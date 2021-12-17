@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: sharding-dao
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
   #sharding-jdbc配置
   shardingsphere:
     props:
@@ -41,12 +45,13 @@ spring:
       default-data-source-name: ds0
       tables:
         bd_history:
-          actual-data-nodes: ds0.bd_history_${2015..2030}_${0..1}
+          actual-data-nodes: ds0.bd_history_${2020..2021}_${0..1}
           table-strategy:
             standard:
               #分片列名称
               sharding-column: history_date
-              precise-algorithm-class-name: com.labi.shardingdao.config.sharding.HistoryPreciseAlgorithm
+              precise-algorithm-class-name: com.labi.shardingdao.config.sharding.algorithm.HistoryPreciseAlgorithm
+              range-algorithm-class-name: com.labi.shardingdao.config.sharding.algorithm.HistoryRangeAlgorithm
   #redis配置
   redis:
     host: localhost # Redis服务器地址
@@ -66,3 +71,8 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+management:
+  health:
+    #关闭数据库健康检查
+    db:
+      enabled: false

@@ -1,8 +1,9 @@
-package com.labi.shardingdao.config.sharding;
+package com.labi.shardingdao.config.sharding.algorithm;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.TypeReference;
+import com.labi.shardingdao.common.Constants;
 import com.labi.shardingdao.mapper.ShardingMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.api.sharding.standard.PreciseShardingAlgorithm;
@@ -22,8 +23,6 @@ import java.util.List;
 @Slf4j
 public class HistoryPreciseAlgorithm implements PreciseShardingAlgorithm<Date> {
 
-    private static final String HISTORY_REDIS_KEY = "table-history";
-    private static final String HISTORY_TABLE_BASE_NAME = "bd_history";
 
     private static RedisTemplate<String, Object> redisTemplate;
     private static ShardingMapper shardingMapper;
@@ -59,7 +58,7 @@ public class HistoryPreciseAlgorithm implements PreciseShardingAlgorithm<Date> {
         Date value = preciseShardingValue.getValue();
         int minute = DateUtil.minute(value);
         int year = DateUtil.year(value);
-        StringBuilder tableNameBuilder = new StringBuilder(HISTORY_TABLE_BASE_NAME).append("_").append(year).append("_");
+        StringBuilder tableNameBuilder = new StringBuilder(Constants.HISTORY_TABLE_BASE_NAME).append("_").append(year).append("_");
         if (minute % 2 == 0) {
             tableNameBuilder.append("0");
         } else {
@@ -67,7 +66,7 @@ public class HistoryPreciseAlgorithm implements PreciseShardingAlgorithm<Date> {
         }
         String tableName = tableNameBuilder.toString();
         //先在redis中检查这张表是否已经存在
-        List<Object> range = redisTemplate.opsForList().range(HISTORY_REDIS_KEY, 0, -1);
+        List<Object> range = redisTemplate.opsForList().range(Constants.HISTORY_REDIS_KEY, 0, -1);
         List<String> alreadyHave = Convert.convert(new TypeReference<List<String>>() {
         }, range);
 
@@ -76,7 +75,7 @@ public class HistoryPreciseAlgorithm implements PreciseShardingAlgorithm<Date> {
             try {
                 shardingMapper.createHistoryTable(tableName);
                 //建完表，把表名存入redis
-                redisTemplate.opsForList().rightPush(HISTORY_REDIS_KEY, tableName);
+                redisTemplate.opsForList().rightPush(Constants.HISTORY_REDIS_KEY, tableName);
             } catch (Exception e) {
                 log.error("建历史表失败:{}", e.getMessage());
             }

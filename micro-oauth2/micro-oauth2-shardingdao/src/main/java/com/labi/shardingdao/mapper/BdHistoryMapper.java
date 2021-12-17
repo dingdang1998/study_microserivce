@@ -1,11 +1,11 @@
 package com.labi.shardingdao.mapper;
 
-import com.labi.shardingdao.entity.BdHistory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.macro.cloud.entity.business.BdHistory;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author labi
