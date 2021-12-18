@@ -11,7 +11,8 @@ public enum ResultCode implements IErrorCode {
     FAILED(50000, "操作失败"),
     VALIDATE_FAILED(40400, "参数检验失败"),
     UNAUTHORIZED(40100, "暂未登录或token已经过期"),
-    FORBIDDEN(40300, "没有相关权限");
+    FORBIDDEN(40300, "没有相关权限"),
+    FEIGN_FALL_BACK(40400, "服务降级返回结果");
     private long code;
     private String message;
 

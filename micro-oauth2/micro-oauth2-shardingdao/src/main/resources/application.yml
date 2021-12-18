@@ -1,5 +1,5 @@
 server:
-  port: 9301
+  port: 9306
 spring:
   application:
     name: sharding-dao

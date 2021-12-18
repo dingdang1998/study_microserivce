@@ -14,6 +14,7 @@
         <module>micro-oauth2-api</module>
         <module>micro-oauth2-shardingdao</module>
         <module>micro-oauth2-general</module>
+        <module>micro-oauth2-fileserver</module>
     </modules>
 
     <packaging>pom</packaging>

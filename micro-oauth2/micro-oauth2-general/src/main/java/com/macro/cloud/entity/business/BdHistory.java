@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -25,6 +23,8 @@ import java.util.Date;
 @Setter
 @TableName("bd_history")
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class BdHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;

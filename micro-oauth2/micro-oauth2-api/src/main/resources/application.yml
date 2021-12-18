@@ -9,6 +9,14 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+feign:
+  #开启服务降级
+  hystrix:
+    enabled: true
+logging:
+  level:
+    #打印feign远程调用日志
+    com.macro.cloud.feign.HistoryFeignService: debug
 management:
   endpoints:
     web:

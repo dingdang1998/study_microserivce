@@ -25,9 +25,8 @@ public class HistoryController {
     @Autowired
     private HistoryFeignService historyFeignService;
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public CommonResult<List<BdHistory>> getList() {
-        List<BdHistory> list = historyFeignService.getList();
-        return CommonResult.success(list);
+        return historyFeignService.getList();
     }
 }

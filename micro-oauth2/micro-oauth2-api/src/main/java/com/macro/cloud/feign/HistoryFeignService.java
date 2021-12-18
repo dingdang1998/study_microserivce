@@ -1,6 +1,7 @@
 package com.macro.cloud.feign;
 
 import com.macro.cloud.entity.business.BdHistory;
+import com.macro.cloud.result.CommonResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author: dzp
  * @create: 2021-12-17 14:27
  **/
-@FeignClient(value = "sharding-dao")
+@FeignClient(value = "sharding-dao", fallback = HistoryFallbackServiceImpl.class)
 public interface HistoryFeignService {
 
     /**
@@ -20,6 +21,6 @@ public interface HistoryFeignService {
      *
      * @return
      */
-    @GetMapping("/list")
-    List<BdHistory> getList();
+    @GetMapping("/bd-history/list")
+    CommonResult<List<BdHistory>> getList();
 }

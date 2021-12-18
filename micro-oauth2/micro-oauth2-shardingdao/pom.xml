@@ -11,6 +11,11 @@
 
     <artifactId>micro-oauth2-shardingdao</artifactId>
 
+    <properties>
+        <mysql.version>8.0.15</mysql.version>
+        <druid.version>1.1.10</druid.version>
+        <sharding.version>4.1.1</sharding.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.macro.cloud</groupId>
@@ -25,13 +30,13 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.15</version>
+            <version>${mysql.version}</version>
         </dependency>
         <!--集成druid连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
+            <version>${druid.version}</version>
         </dependency>
         <!--mybatisPlus-->
         <dependency>
@@ -47,7 +52,7 @@
         <dependency>
             <groupId>org.apache.shardingsphere</groupId>
             <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-            <version>4.1.1</version>
+            <version>${sharding.version}</version>
         </dependency>
     </dependencies>
 </project>

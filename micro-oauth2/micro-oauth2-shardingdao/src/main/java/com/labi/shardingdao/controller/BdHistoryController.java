@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.labi.shardingdao.service.IBdHistoryService;
 import com.macro.cloud.entity.business.BdHistory;
+import com.macro.cloud.result.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,12 @@ public class BdHistoryController {
     }
 
     @GetMapping("/list")
-    public List<BdHistory> getList() {
+    public CommonResult<List<BdHistory>> getList() {
         LambdaQueryWrapper<BdHistory> queryWrapper = new LambdaQueryWrapper<>();
         DateTime date = DateUtil.date();
         queryWrapper.le(BdHistory::getHistoryDate, date);
         queryWrapper.ge(BdHistory::getHistoryDate, DateUtil.offsetDay(date, -7));
-        return historyService.list(queryWrapper);
+        return CommonResult.success(historyService.list(queryWrapper));
     }
 }
 
