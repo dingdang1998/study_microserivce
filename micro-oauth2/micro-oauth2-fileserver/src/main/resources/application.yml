@@ -13,8 +13,6 @@ spring:
 minio:
   #MinIO服务所在地址
   endpoint: http://192.168.17.32:9000
-  #存储桶名称
-  bucketName: macro2
   #访问的key
   accessKey: minioadmin
   #访问的秘钥
