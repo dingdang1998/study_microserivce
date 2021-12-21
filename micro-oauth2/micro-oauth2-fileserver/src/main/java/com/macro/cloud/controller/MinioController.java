@@ -1,8 +1,10 @@
 package com.macro.cloud.controller;
 
 import cn.hutool.core.date.DateUtil;
-import com.macro.cloud.config.BucketPolicyConstants;
 import com.macro.cloud.dto.MinioUploadDto;
+import com.macro.cloud.config.BucketPolicyManager;
+import com.macro.cloud.config.BucketPolicyTypeEnum;
+import com.macro.cloud.config.IBucketPolicy;
 import com.macro.cloud.result.CommonResult;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +28,6 @@ public class MinioController {
 
     @Value("${minio.endpoint}")
     private String ENDPOINT;
-    @Value("${minio.bucketName}")
-    private String BUCKET_NAME;
     @Value("${minio.accessKey}")
     private String ACCESS_KEY;
     @Value("${minio.secretKey}")
@@ -36,27 +36,32 @@ public class MinioController {
     /**
      * 文件上传
      *
-     * @param file
+     * @param file             上传的文件
+     * @param bucketName       往哪个桶里放
+     * @param bucketPolicyType
      * @return
      */
     @PostMapping(value = "/upload")
-    public CommonResult<MinioUploadDto> upload(@RequestParam("file") MultipartFile file) {
+    public CommonResult<MinioUploadDto> upload(@RequestParam("file") MultipartFile file,
+                                               @RequestParam("bucketName") String bucketName,
+                                               @RequestParam("bucketPolicyType") String bucketPolicyType) {
         try {
             //创建一个MinIO的Java客户端
             MinioClient minioClient = MinioClient.builder()
                     .endpoint(ENDPOINT)
                     .credentials(ACCESS_KEY, SECRET_KEY)
                     .build();
-            boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build());
+            boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (isExist) {
                 log.info("存储桶已经存在！");
             } else {
                 //创建存储桶
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
                 //创建桶为只读
+                IBucketPolicy bucketPolicy = BucketPolicyManager.factory(BucketPolicyTypeEnum.getEnum(bucketPolicyType));
                 minioClient.setBucketPolicy(SetBucketPolicyArgs.builder()
-                        .bucket(BUCKET_NAME)
-                        .config(BucketPolicyConstants.READ_ONLY)
+                        .bucket(bucketName)
+                        .config(bucketPolicy.getBucketPolicy(bucketName))
                         .build());
             }
 
@@ -69,7 +74,7 @@ public class MinioController {
 
             try (InputStream inputStream = file.getInputStream()) {
                 minioClient.putObject(PutObjectArgs.builder()
-                        .bucket(BUCKET_NAME)
+                        .bucket(bucketName)
                         .stream(inputStream, inputStream.available(), -1)
                         .object(objectName.toString())
                         .contentType(file.getContentType())
@@ -80,8 +85,8 @@ public class MinioController {
             }
 
             MinioUploadDto minioUploadDto = new MinioUploadDto();
-            minioUploadDto.setName(objectName.toString());
-            minioUploadDto.setUrl(new StringBuilder(ENDPOINT).append("/").append(BUCKET_NAME).append("/").append(objectName.toString()).toString());
+            minioUploadDto.setObjectName(objectName.toString());
+            minioUploadDto.setUrl(new StringBuilder(ENDPOINT).append("/").append(bucketName).append("/").append(objectName.toString()).toString());
             return CommonResult.success(minioUploadDto);
 
         } catch (Exception e) {
@@ -90,9 +95,14 @@ public class MinioController {
         return CommonResult.failed();
     }
 
-
-    @GetMapping("/get")
-    public CommonResult<String> getCusBucketPolicy() {
+    /**
+     * 获取桶的配置
+     *
+     * @param bucketName 桶名称
+     * @return
+     */
+    @GetMapping("/getBucketPolicy")
+    public CommonResult<String> getCusBucketPolicy(@RequestParam("bucketName") String bucketName) {
 
         try {
             MinioClient minioClient = MinioClient.builder()
@@ -100,29 +110,36 @@ public class MinioController {
                     .credentials(ACCESS_KEY, SECRET_KEY)
                     .build();
 
-            String bucketPolicy = minioClient.getBucketPolicy(GetBucketPolicyArgs.builder().bucket(BUCKET_NAME).build());
+            String bucketPolicy = minioClient.getBucketPolicy(GetBucketPolicyArgs.builder().bucket(bucketName).build());
             return CommonResult.success(bucketPolicy);
         } catch (Exception e) {
             log.error("{}", e.getMessage());
+            return CommonResult.failed("桶不存在！");
         }
-
-        return CommonResult.failed();
     }
-//    /**
-//     * 文件删除
-//     *
-//     * @param objectName
-//     * @return
-//     */
-//    @DeleteMapping("/delete")
-//    public CommonResult delete(@RequestParam("objectName") String objectName) {
-//        try {
-//            MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
-//            minioClient.removeObject(BUCKET_NAME, objectName);
-//            return CommonResult.success(null);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return CommonResult.failed();
-//    }
+
+
+    /**
+     * 文件删除
+     *
+     * @param objectName 文件名称
+     * @param bucketName 桶名称
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public CommonResult<String> delete(@RequestParam("objectName") String objectName,
+                                       @RequestParam("bucketName") String bucketName) {
+        try {
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint(ENDPOINT)
+                    .credentials(ACCESS_KEY, SECRET_KEY)
+                    .build();
+            minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+            return CommonResult.success("删除成功");
+        } catch (Exception e) {
+            log.error("{}", e.getMessage());
+            return CommonResult.failed("删除失败");
+        }
+    }
+
 }

@@ -17,5 +17,5 @@ public class MinioUploadDto {
     /**
      * 文件名
      */
-    private String name;
+    private String objectName;
 }
